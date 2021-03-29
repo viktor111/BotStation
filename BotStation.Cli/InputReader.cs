@@ -25,6 +25,8 @@ namespace BotStation.Cli
             IWebsiteSourceAdapter scraperSource = null;
             IEnumerable<ScrapingResults> results = null;
 
+            consoleMessages.DisplayHelp();
+
             while (true)
             {
                 Console.Write("> ");
@@ -64,9 +66,13 @@ namespace BotStation.Cli
                         var newResults = results.Where(r => r.Price > price).ToList();
                         Print<ScrapingResults>.Table(newResults);
                     }
-                    else if(commands.Action is "help")
+                    else if(commands.Action is "help" && commands.Data is "me")
                     {
                         consoleMessages.DisplayHelp();
+                    }
+                    else if (commands.Action is "exit" && commands.Data is "now")
+                    {
+                        Environment.Exit(0);
                     }
                     else
                     {
