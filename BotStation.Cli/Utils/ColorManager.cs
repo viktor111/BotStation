@@ -29,7 +29,7 @@ namespace BotStation.Cli.Utils
         public static void Warning()
         {
             Console.BackgroundColor = ConsoleColor.Yellow;
-            Console.ForegroundColor = ConsoleColor.Gray;
+            Console.ForegroundColor = ConsoleColor.DarkRed;
         }
 
         public static void ResetColor()

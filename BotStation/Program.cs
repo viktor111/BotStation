@@ -1,6 +1,6 @@
 ﻿using BotStation.Cli;
 using BotStation.DependancyInjector;
 
-var  container = new DependancyContainer();
+var inputReader = new InputReader();
 
-InputReader.BeginWaitForInput();
+inputReader.BeginWaitForInput();

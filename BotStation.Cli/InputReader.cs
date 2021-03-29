@@ -12,10 +12,16 @@ namespace BotStation.Cli
 {
     public class InputReader
     {
-        public static void BeginWaitForInput()
+        public InputReader()
+        {
+
+        }
+
+        public void BeginWaitForInput()
         {
             var commandMapper = new CommandMapper();
             InputCommands commands = null;
+            var consoleMessages = new ConsoleMesseges();
             IWebsiteSourceAdapter scraperSource = null;
             IEnumerable<ScrapingResults> results = null;
 
@@ -26,34 +32,45 @@ namespace BotStation.Cli
                 try
                 {
                     string input = Console.ReadLine();
-                    commands = InputParser.ParseInputCommands(input);
-                    
+                    commands = InputParser.ParseInputCommands(input);                    
 
                     InputParser.ValidateInput(commands);
 
-                    if (commands.Action == "mount")
+                    if (commands.Action is "mount" && commands.Data is not null)
                     {
                         commands = InputParser.SetScrapingType(commands);
                         scraperSource = commandMapper.MapScrapeToSource(commands);
                     }
-
-                    if (commands.Action == "begin")
+                    else if (commands.Action is "begin" && commands.Data is "now")
                     {
-                        
-                        Print<ScrapingResults>.Info("Be patient data is being loaded...");
-                        results = scraperSource.InitiateScraping();
-                        Print<ScrapingResults>.Table(results);
-                        Print<ScrapingResults>.Success("Data loaded");
-                        Console.WriteLine();
+                        if(scraperSource is not null) 
+                        {
+                            Print<ScrapingResults>.Info("Be patient data is being loaded...");
+                            results = scraperSource.InitiateScraping();
+                            Print<ScrapingResults>.Table(results);
+                            Print<ScrapingResults>.Success("Data loaded");
+                            Console.WriteLine();
+                        }
+                        else
+                        {
+                            throw new Exception("First mount a scraper");
+                        }
                     }
-
-                    if (commands.Action == "sort")
+                    else if (commands.Action is "sort")
                     {
                         Print<ScrapingResults>.Success("Sorting phase initiated");
                         Print<ScrapingResults>.Info($"Sorting porducts low point price {commands.Data}");
                         var price = Convert.ToDecimal(commands.Data);
                         var newResults = results.Where(r => r.Price > price).ToList();
                         Print<ScrapingResults>.Table(newResults);
+                    }
+                    else if(commands.Action is "help")
+                    {
+                        consoleMessages.DisplayHelp();
+                    }
+                    else
+                    {
+                        Print<string>.Warning("Command not recognized");
                     }
                 }
                 catch (Exception e)

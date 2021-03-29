@@ -76,7 +76,7 @@ namespace BotStation.Cli
             }
             catch
             {
-                throw new Exception("input not right format");
+                throw new Exception("input not in right format should be - [action] [data]");
             }
         }
     }

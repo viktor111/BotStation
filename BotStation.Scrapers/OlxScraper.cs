@@ -48,7 +48,6 @@ namespace BotStation.Scrapers
                         {
                             var linksHtmlNodeCollection = child.SelectNodes("//*[contains(@data-cy, 'listing-ad-title')]");
 
-
                             for (int j = 0; j < linksHtmlNodeCollection.Count; j++)
                             {
                                 var linksHtmlNode = linksHtmlNodeCollection[j];
@@ -73,8 +72,6 @@ namespace BotStation.Scrapers
                                 };
 
                                 listOfScrapingResults.Add(scrapingResult);
-
-                                //if(priceConverted > 1500) Console.WriteLine($"{titleHtmlNode.InnerHtml} - {priceHtmlNode.InnerHtml} - {productPageUri}");
                             }
                         }
                     }
